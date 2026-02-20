@@ -79,6 +79,10 @@ def classify_event(
 
     chosen_layer = "andet"
     for layer, (s, e) in time_rules.items():
+config_path = "config.yaml" if os.path.exists("config.yaml") else "config.example.yaml"
+with open(config_path, "r", encoding="utf-8") as f:
+    cfg = yaml.safe_load(f)
+
         if start_s == s and end_s == e:
             chosen_layer = layer
             break
@@ -87,8 +91,7 @@ def classify_event(
 
 
 def main():
-    with open("config.yaml", "r", encoding="utf-8") as f:
-        cfg = yaml.safe_load(f)
+    with 
 
     url = cfg["source_ics_url"]
     tz = pytz.timezone(cfg.get("timezone", "Europe/Copenhagen"))
