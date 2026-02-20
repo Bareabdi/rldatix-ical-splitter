@@ -79,10 +79,6 @@ def classify_event(
 
     chosen_layer = "andet"
     for layer, (s, e) in time_rules.items():
-config_path = "config.yaml" if os.path.exists("config.yaml") else "config.example.yaml"
-with open(config_path, "r", encoding="utf-8") as f:
-    cfg = yaml.safe_load(f)
-
         if start_s == s and end_s == e:
             chosen_layer = layer
             break
@@ -91,11 +87,17 @@ with open(config_path, "r", encoding="utf-8") as f:
 
 
 def main():
-    with 
+    # Load config (local: config.yaml, CI: config.example.yaml)
+    config_path = "config.yaml" if os.path.exists("config.yaml") else "config.example.yaml"
+    with open(config_path, "r", encoding="utf-8") as f:
+        cfg = yaml.safe_load(f)
 
-    url = cfg["source_ics_url"]
+    url = os.environ.get("RLDATIX_ICS_URL")
+    if not url:
+        raise RuntimeError("Missing env var: RLDATIX_ICS_URL")
+
     tz = pytz.timezone(cfg.get("timezone", "Europe/Copenhagen"))
-    out_dir = cfg.get("output_dir", "out")
+    out_dir = cfg.get("output_dir", "site")
 
     type_rules = cfg.get("shift_type_rules", {})
     time_rules_raw = cfg.get("shift_time_rules", {})
@@ -106,13 +108,7 @@ def main():
     source = Calendar.from_ical(r.content)
 
     events = [c for c in source.walk() if c.name == "VEVENT"]
-    print(f"Fandt {len(events)} events i RLDatix-kalenderen")
-
-    # DEBUG: print first 10 times
-    for ev in events[:10]:
-        dtstart = ev.decoded("DTSTART")
-        dtend = ev.decoded("DTEND")
-        print("DEBUG:", dtstart, "->", dtend)
+    print(f"Found {len(events)} events")
 
     buckets: Dict[Tuple[str, str], Calendar] = {}
 
@@ -142,7 +138,7 @@ def main():
             f.write(cal.to_ical())
         written += 1
 
-    print(f"Skrev {written} nye .ics-filer til mappen: {out_dir}/")
+    print(f"Wrote {written} calendars to {out_dir}/")
 
 
 if __name__ == "__main__":
