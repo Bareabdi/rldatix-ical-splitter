@@ -1,0 +1,14 @@
+timezone: "Europe/Copenhagen"
+output_dir: "site"
+
+shift_type_rules:
+  ambulatorie: ["amb", "ambulator", "HESKAMB"]
+  skadestue: ["skad", "modtag", "akut", "HEAKM1", "HEFVAN", "Akutmodtagelse"]
+  stuegang: ["stuegang", "HE1154STG", "HE119STG"]
+  andet: ["kursus", "fsh"]
+
+shift_time_rules:
+  "07:45-15:15": ["06:45", "14:15"]
+  "07:45-18:00": ["06:45", "21:00"]
+  "07:00-21:00": ["07:00", "21:00"]
+  "17:30-08:30": ["16:30", "07:30"]
