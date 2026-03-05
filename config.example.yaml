@@ -2,10 +2,10 @@ timezone: "Europe/Copenhagen"
 output_dir: "site"
 
 shift_type_rules:
-  ambulatorie: ["amb", "ambulator", "HESKAMB"]
-  skadestue: ["skad", "modtag", "akut", "HEAKM1", "HEFVAN", "Akutmodtagelse"]
-  stuegang: ["stuegang", "HE1154STG", "HE119STG"]
-  andet: ["kursus", "fsh"]
+  ambulatorie: ["HESKAMB"]
+  skadestue: ["HEAKM1", "HEFVAN", "Akutmodtagelse"]
+  stuegang: ["stuegang", "HE114STG", "HE119STG"]
+  andet: ["kursus", "fsh", "fri", "INTRO"]
 
 shift_time_rules:
   "07:45-15:15": ["06:45", "14:15"]
